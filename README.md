@@ -6,7 +6,7 @@ Vite + React portfolio with light/dark mode, loading timer, auto-scrolling skill
 
 ```bash
 npm install
-cp .env.example .env   # then fill in your EmailJS keys
+cp .env.example .env   # then paste your Google Script URL
 npm run dev
 npm run build          # production build in /dist
 ```
@@ -17,38 +17,24 @@ npm run build          # production build in /dist
 | --- | --- |
 | Auto-scrolling skills carousel | `swiper` |
 | Projects timeline | `react-vertical-timeline-component` |
-| Contact form → your email | `@emailjs/browser` |
+| Contact form → your email | Google Apps Script (no package) |
 | Icons | `react-icons` |
 
-## Set up the email form (EmailJS, free plan)
+## Set up the email form (Google Apps Script – free, uses your Gmail)
 
-1. Create an account at https://www.emailjs.com.
-2. **Email Services** → Add service (Gmail) → connect `hstudy575@gmail.com`. Copy the **Service ID**.
-3. **Email Templates** → Create template. Set **To email** to `hstudy575@gmail.com` and **Reply-To** to `{{from_email}}`. Use this body:
+1. Open https://script.google.com signed in as `hstudy575@gmail.com` → **New project**.
+2. Delete the default code, paste everything from `apps-script/Code.gs`, click **Save**.
+3. **Deploy → New deployment → ⚙ Select type → Web app**
+   - Execute as: **Me**
+   - Who has access: **Anyone**
+4. Click **Deploy** → **Authorize access** → choose your account → **Advanced → Go to project (unsafe) → Allow** (it is your own script).
+5. Copy the **Web app URL** (ends with `/exec`).
+6. Create `.env` from `.env.example` and set `VITE_GOOGLE_SCRIPT_URL=` to that URL. Restart `npm run dev`.
+7. On Vercel/Netlify add the same variable and redeploy.
 
-```
-Subject: New hiring request – {{position}} at {{company_name}}
+If you change `Code.gs` later: **Deploy → Manage deployments → ✏ Edit → Version: New version → Deploy** (the URL stays the same).
 
-Company: {{company_name}}
-Contact person: {{contact_person}}
-Email: {{from_email}}
-Phone: {{phone}}
-
-Position: {{position}}
-Job type: {{job_type}}
-Work mode: {{work_mode}}
-Location: {{location}}
-Salary/Stipend: {{salary}}
-
-Message:
-{{message}}
-```
-
-   Copy the **Template ID**.
-4. **Account → General** → copy your **Public Key**.
-5. Put the three values in `.env`. When deploying (Vercel/Netlify), add the same three variables in the host's Environment Variables settings.
-
-Note: the EmailJS public key is visible in the browser by design. In the EmailJS dashboard, restrict allowed domains to your portfolio domain to prevent abuse.
+Limit: about 100 emails/day on a normal Gmail account – plenty for a portfolio.
 
 ## Edit content
 
@@ -56,12 +42,10 @@ All text, projects, skills, experience and certificates live in `src/data.js`.
 
 ## Test & troubleshoot the contact form
 
-- After editing `.env`, **restart** `npm run dev` (Vite reads `.env` only at start).
-- Submit the form once yourself and check `hstudy575@gmail.com` (and Spam).
-- Template variable names must match exactly: `company_name, contact_person, from_email, phone, position, job_type, work_mode, location, salary, message`.
-- "Contact form is not configured yet" → `.env` values are missing/not loaded.
-- Error on send → wrong IDs/key, Gmail service disconnected, or the domain is blocked in EmailJS security settings.
-- Optional: add an **Auto-Reply** template in EmailJS so the company gets a confirmation (send it to `{{from_email}}`).
+- After editing `.env`, restart `npm run dev`.
+- "Contact form is not configured yet" → `VITE_GOOGLE_SCRIPT_URL` missing.
+- "Something went wrong" → the Web app must be deployed with access **Anyone**, and the URL must end in `/exec` (not `/dev`).
+- Check `hstudy575@gmail.com` (and Spam) after a test submit.
 
 ## Certificates
 

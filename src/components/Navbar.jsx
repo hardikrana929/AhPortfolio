@@ -20,9 +20,7 @@ export default function Navbar() {
     <header className="navbar">
       <div className="container navbar__inner">
         <a href="#home" className="navbar__brand">
-          <img src="https://res.cloudinary.com/dxz5ta03h/image/upload/v1768743113/portfolio_y6otag.png"
-            width="30px"
-          />
+          &lt;Hardik /&gt;
         </a>
 
         <nav className={`navbar__links ${open ? "open" : ""}`}>

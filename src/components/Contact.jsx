@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import emailjs from "@emailjs/browser";
 import {
   FaPhoneAlt,
   FaEnvelope,
@@ -10,9 +9,8 @@ import {
 import { FaXTwitter } from "react-icons/fa6";
 import { profile } from "../data.js";
 
-const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+// URL of your Google Apps Script Web App (ends with /exec). See README.
+const SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
 
 const empty = {
   company_name: "",
@@ -46,7 +44,7 @@ export default function Contact() {
       });
       return;
     }
-    if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
+    if (!SCRIPT_URL) {
       setStatus({
         type: "error",
         msg: "Contact form is not configured yet. Please email me directly.",
@@ -56,10 +54,14 @@ export default function Contact() {
 
     setStatus({ type: "loading", msg: "Sending…" });
     try {
-      const { website, ...params } = form;
-      await emailjs.send(SERVICE_ID, TEMPLATE_ID, params, {
-        publicKey: PUBLIC_KEY,
+      // No custom headers => "simple" request, so the browser sends no CORS preflight
+      // (Apps Script cannot answer preflights).
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(form),
       });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || "Send failed");
       lastSent.current = Date.now();
       setForm(empty);
       setStatus({

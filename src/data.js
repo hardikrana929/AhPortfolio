@@ -9,10 +9,10 @@ import {
   SiExpress,
   SiMongodb,
   SiMysql,
-  SiTailwindcss,
+  SiSpringboot,
   SiGit,
 } from "react-icons/si";
-import { FaGithub } from "react-icons/fa6";
+import { FaJava } from "react-icons/fa";
 
 export const profile = {
   name: "Hardik Asavala",
@@ -41,24 +41,13 @@ export const skills = [
   { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
   { name: "Express", icon: SiExpress, color: "#888888" },
   { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
-  { name: "Tailwindcss", icon: SiTailwindcss, color: "#4479A1" },
+  { name: "Java", icon: FaJava, color: "#E76F00" },
+  { name: "Spring Boot", icon: SiSpringboot, color: "#6DB33F" },
   { name: "MySQL", icon: SiMysql, color: "#4479A1" },
   { name: "Git", icon: SiGit, color: "#F05032" },
-  { name: "GitHub", icon: FaGithub, color: "#F05032" },
 ];
 
 export const projects = [
-  {
-    title: "AuctionPro",
-    subtitle: "Smart Cricket Auction System",
-    description:
-      "AuctionPro brings cricket auctions into one powerful platform. Manage players, teams, budgets, registrations, live bidding and auction results with complete control.",
-    image:
-      "https://res.cloudinary.com/ddn203hk8/image/upload/v1795369536/Screenshot_2026-11-18_162606_xqpsl3.png",
-    link: "https://auction-frontend-eosin.vercel.app/",
-    linkLabel: "Live Demo",
-    tags: ["Smart Auction", "Smart Bidding"],
-  },
   {
     title: "JanSahay",
     subtitle: "Government benefits discovery",
@@ -150,59 +139,24 @@ export const experiences = [
 // link  : optional URL to the original certificate / verification page.
 export const certifications = [
   {
-    title: "Introduction to Data Science",
-    issuer: "CISCO Networking Academy",
-    date: "Mar 2026",
+    title: "Web Development Internship – A Grade",
+    issuer: "XCEPTIVE SOLUTIONS LLP",
+    date: "Jan 2026",
     description:
-      "Completed a Introduction to Data Science course from CISCO Networking Academy.",
+      "Completed a 120-hour Web Development internship, gaining practical experience in web development and achieving an A grade.",
     credentialId: "",
-    highlights: ["Data Science", "CISCO"],
-    image: "https://res.cloudinary.com/ddn203hk8/image/upload/v1795367474/CISCO-Data_Science_e3cidy.png",
-    link: "https://res.cloudinary.com/ddn203hk8/image/upload/v1795367474/CISCO-Data_Science_e3cidy.png",
+    highlights: ["120 hours", "Grade A", "Web Development"],
+    image: "",
+    link: "",
   },
-  {
-    title: "Getting Started with Cybersecurity",
-    issuer: "IBM SkillBuild",
-    date: "Oct 2026",
-    description:
-      "Completed a Getting Started with Cybersecurity from IBM.",
-    credentialId: "fad13df1-0b8b-45ec-38032a9b7d06",
-    highlights: ["Cybersecurity", "IBM"],
-    image: "https://res.cloudinary.com/ddn203hk8/image/upload/v1795367962/IBM-Certificate_tdynzy.png",
-    link: "https://res.cloudinary.com/ddn203hk8/image/upload/v1795367962/IBM-Certificate_tdynzy.png",
-  },
-  {
-    title: "GEET",
-    issuer: "Infosys Foundation",
-    date: "Aug 2026",
-    description:
-      "Completed a GEET(Graduate Employability Enhancement Training) course from Learnet.",
-    credentialId: "",
-    highlights: ["Infosys Foundatin", "Learnet", "Yuva Unstoppable"],
-    image: "https://res.cloudinary.com/ddn203hk8/image/upload/v1795367473/Infosys_ngu4om.jpg",
-    link: "https://res.cloudinary.com/ddn203hk8/image/upload/v1795367473/Infosys_ngu4om.jpg",
-  },
-
-  {
-    title: "TCS ION Career Edge - AI Foundation",
-    issuer: "TCS ION",
-    date: "Sep 2026",
-    description:
-      "Completed TCS ION Career Edge - AI Foundation course that covers Introduction to AI | Generative AI Essentials | Prompt Engineering Basics | AI Tools | Responsible AI.",
-    credentialId: "279243-28570705-1016",
-    highlights: ["TCS", "TCS ION", "Career Edge Tech", "AI"],
-    image: "https://res.cloudinary.com/ddn203hk8/image/upload/v1795367474/TCS-AI_Foundation_lyrnok.png",
-    link: "https://res.cloudinary.com/ddn203hk8/image/upload/v1795367474/TCS-AI_Foundation_lyrnok.png",
-  },
-  {
-    title: "CCBP 4.0 Intensive",
-    issuer: "nasscom",
-    date: "Nov 2026",
-    description:
-      "Aligned to Competency Standards developed by IT-ITeS Sector Skills Council Nasscom in collaboration with Industry and approved by Govemment.",
-    credentialId: "",
-    highlights: ["nasscom", "CCBP 4.0", "NxtWave"],
-    image: "https://res.cloudinary.com/ddn203hk8/image/upload/v1795367473/nasscom_naczdl.png",
-    link: "https://res.cloudinary.com/ddn203hk8/image/upload/v1795367473/nasscom_naczdl.png",
-  }
+  // {
+  //   title: "Your certificate name",
+  //   issuer: "Issuer",
+  //   date: "Mon YYYY",
+  //   description: "Short description",
+  //   credentialId: "ABC-12345",
+  //   highlights: ["React", "Node.js"],
+  //   image: "/certificates/my-cert.jpg",
+  //   link: "https://...",
+  // },
 ];

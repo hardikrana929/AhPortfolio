@@ -20,10 +20,10 @@ export default function Projects() {
             contentStyle={{
               background: "var(--card)",
               color: "var(--text)",
-              boxShadow: "var(--shadow)",
+              boxShadow: "var(--shadow), var(--glass-hl)",
               border: "1px solid var(--border)",
             }}
-            contentArrowStyle={{ borderRight: "20px solid var(--card)" }}
+            contentArrowStyle={{ borderRight: "7px solid var(--card)" }}
             iconStyle={{ background: "var(--accent)", color: "#fff" }}
             icon={<FaCode />}
           >

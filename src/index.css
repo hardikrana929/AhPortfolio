@@ -60,18 +60,11 @@ html {
 }
 
 body {
-  font-family:
-    "Segoe UI",
-    system-ui,
-    -apple-system,
-    Roboto,
-    sans-serif;
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
-  transition:
-    background 0.3s,
-    color 0.3s;
+  transition: background 0.3s, color 0.3s;
 }
 
 img {
@@ -699,8 +692,7 @@ body::before {
 .socials a,
 .icon-btn,
 .modal__box {
-  background:
-    linear-gradient(135deg, var(--sheen), transparent 55%), var(--card);
+  background: linear-gradient(135deg, var(--sheen), transparent 55%), var(--card);
   border: 1px solid var(--border);
   backdrop-filter: blur(var(--blur)) saturate(180%);
   -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
@@ -721,9 +713,7 @@ body::before {
   border-color: var(--accent);
 }
 
-@supports not (
-  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
-) {
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   :root,
   :root[data-theme="light"] {
     --card: rgba(255, 255, 255, 0.92);
@@ -885,21 +875,13 @@ body::before {
 .vertical-timeline-element-content,
 .socials a,
 .icon-btn {
-  background: linear-gradient(
-    145deg,
-    var(--card-hi) 0%,
-    var(--card) 55%
-  ) !important;
+  background: linear-gradient(145deg, var(--card-hi) 0%, var(--card) 55%) !important;
   border: 1px solid var(--border);
-  box-shadow:
-    var(--shadow),
-    inset 0 1px 0 var(--hi) !important;
+  box-shadow: var(--shadow), inset 0 1px 0 var(--hi) !important;
 }
 .modal__box {
   background: var(--modal);
-  box-shadow:
-    var(--shadow),
-    inset 0 1px 0 var(--hi);
+  box-shadow: var(--shadow), inset 0 1px 0 var(--hi);
 }
 .icon-btn {
   box-shadow: inset 0 1px 0 var(--hi) !important;
@@ -953,11 +935,7 @@ body::before {
 }
 .exp__dot,
 .vertical-timeline-element-icon {
-  background: linear-gradient(
-    135deg,
-    var(--accent),
-    var(--accent-2)
-  ) !important;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2)) !important;
   color: #fff !important;
 }
 :root[data-theme="dark"] .exp__dot,
