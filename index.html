@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Hardik Asavala – Full-stack Web Developer (MERN). Portfolio, projects, experience and contact."
+    />
+    <title>Hardik Asavala | Portfolio</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://res.cloudinary.com/dxz5ta03h/image/upload/v1768743113/portfolio_y6otag.png"
+    />
+    <script>
+      // Apply saved/system theme before first paint (prevents flash)
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
