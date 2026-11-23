@@ -1,53 +1,58 @@
-# Hardik Asavala – React Portfolio
+# Hardik Asavala – Portfolio (React + Tailwind CSS)
 
-Vite + React portfolio with light/dark mode, loading timer, auto-scrolling skills carousel, project timeline, experience, certifications and a "Hire Me" form that emails you (no database).
+Vite + React + Tailwind CSS. Glass UI, light/dark mode, loading timer, auto skills carousel,
+projects timeline, experience, certificate carousel and a **Hire Me form that emails you
+through your own Gmail (Google App Password)** – nothing is stored in a database.
 
-## Run
-
+## Run locally
 ```bash
 npm install
-cp .env.example .env   # then paste your Google Script URL
+cp .env.example .env     # then fill in GMAIL_USER + GMAIL_APP_PASSWORD
 npm run dev
-npm run build          # production build in /dist
 ```
+The contact form works locally too (a tiny dev server runs `api/contact.js`).
+To test without sending a real email: add `MAIL_DRY_RUN=1` to `.env` (the email is only printed in the terminal).
 
-## npm packages used
+## How the email works
+React form → `POST /api/contact` → `api/contact.js` (serverless function) → Nodemailer → Gmail SMTP → your inbox.
+The App Password lives only in server environment variables, never in the browser code.
 
-| Feature | Package |
+## 1) Create the Google App Password
+1. Open https://myaccount.google.com/security (signed in as `hstudy575@gmail.com`).
+2. Turn on **2-Step Verification** (required for App Passwords).
+3. Open https://myaccount.google.com/apppasswords → name it `portfolio` → **Create**.
+4. Copy the 16-character password (spaces don't matter).
+
+## 2) Local `.env`
+```
+GMAIL_USER=hstudy575@gmail.com
+GMAIL_APP_PASSWORD=abcd efgh ijkl mnop
+```
+Restart `npm run dev` after editing `.env`. Never commit `.env` (it is in `.gitignore`).
+
+## 3) Deploy on Vercel
+1. Push the project to GitHub and import it in Vercel (framework: Vite is auto-detected).
+2. **Settings → Environment Variables**: add `GMAIL_USER` and `GMAIL_APP_PASSWORD`
+   (tick Production, Preview, Development). Optional: `MAIL_TO`.
+3. **Deployments → Redeploy** (variables apply only to new deployments).
+4. Open the live site, submit the form, check your inbox (and Spam the first time).
+
+## Built-in protection
+Hidden honeypot field, server-side validation, HTML escaping, header-injection protection,
+max 3 submissions/minute per visitor, 30-second resend limit in the browser.
+
+## Troubleshooting
+| Symptom | Fix |
 | --- | --- |
-| Auto-scrolling skills carousel | `swiper` |
-| Projects timeline | `react-vertical-timeline-component` |
-| Contact form → your email | Google Apps Script (no package) |
-| Icons | `react-icons` |
-
-## Set up the email form (Google Apps Script – free, uses your Gmail)
-
-1. Open https://script.google.com signed in as `hstudy575@gmail.com` → **New project**.
-2. Delete the default code, paste everything from `apps-script/Code.gs`, click **Save**.
-3. **Deploy → New deployment → ⚙ Select type → Web app**
-   - Execute as: **Me**
-   - Who has access: **Anyone**
-4. Click **Deploy** → **Authorize access** → choose your account → **Advanced → Go to project (unsafe) → Allow** (it is your own script).
-5. Copy the **Web app URL** (ends with `/exec`).
-6. Create `.env` from `.env.example` and set `VITE_GOOGLE_SCRIPT_URL=` to that URL. Restart `npm run dev`.
-7. On Vercel/Netlify add the same variable and redeploy.
-
-If you change `Code.gs` later: **Deploy → Manage deployments → ✏ Edit → Version: New version → Deploy** (the URL stays the same).
-
-Limit: about 100 emails/day on a normal Gmail account – plenty for a portfolio.
+| "Mail service is not configured." | `GMAIL_USER` / `GMAIL_APP_PASSWORD` missing – add on Vercel and redeploy |
+| "Could not send the message." | Wrong App Password, 2-Step Verification off, or password revoked. Check Vercel → Logs → `Mail send failed:` |
+| `/api/contact` 404 locally | Use `npm run dev` (not opening `dist/index.html` directly) |
+| Form works locally, not on Vercel | Variables not added for Production, or you didn't redeploy |
 
 ## Edit content
+Everything (profile, skills, projects, experience, certificates) lives in `src/data.js`.
+Certificate images: put files in `public/certificates/` and use `image: "/certificates/name.jpg"`.
+Colors: top of `src/index.css` (`--accent`, `--blob1..3`, `--card` …).
 
-All text, projects, skills, experience and certificates live in `src/data.js`.
-
-## Test & troubleshoot the contact form
-
-- After editing `.env`, restart `npm run dev`.
-- "Contact form is not configured yet" → `VITE_GOOGLE_SCRIPT_URL` missing.
-- "Something went wrong" → the Web app must be deployed with access **Anyone**, and the URL must end in `/exec` (not `/dev`).
-- Check `hstudy575@gmail.com` (and Spam) after a test submit.
-
-## Certificates
-
-Put certificate images in `public/certificates/` and add an entry in `src/data.js`:
-`image: "/certificates/my-cert.jpg"`. Clicking a card opens a larger preview with full details.
+## Stack
+Tailwind CSS 3 · Swiper (carousels) · react-vertical-timeline-component · react-icons · Nodemailer

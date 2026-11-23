@@ -24,11 +24,26 @@ export default function Loader({ onDone }) {
   }, [onDone]);
 
   return (
-    <div className={`loader ${hide ? "loader--hide" : ""}`} role="status" aria-live="polite">
-      <div className="loader__ring" style={{ "--p": progress }}>
-        <span>{progress}%</span>
+    <div
+      role="status"
+      aria-live="polite"
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center gap-5 transition-opacity duration-500 ${
+        hide ? "pointer-events-none opacity-0" : "opacity-100"
+      }`}
+      style={{ background: "var(--bg)" }}
+    >
+      <div
+        className="loader-ring grid h-32 w-32 place-items-center rounded-full"
+        style={{ "--p": progress }}
+      >
+        <span
+          className="grid h-[104px] w-[104px] place-items-center rounded-full text-2xl font-bold"
+          style={{ background: "var(--bg)" }}
+        >
+          {progress}%
+        </span>
       </div>
-      <p className="loader__text">Loading portfolio…</p>
+      <p className="tracking-widest text-muted">Loading portfolio…</p>
     </div>
   );
 }

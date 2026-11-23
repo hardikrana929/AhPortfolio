@@ -17,21 +17,31 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="navbar">
-      <div className="container navbar__inner">
-        <a href="#home" className="navbar__brand">
-          &lt;Hardik /&gt;
+    <header
+      className="fixed inset-x-0 top-0 z-50 border-b backdrop-blur-xl"
+      style={{ background: "var(--nav)", borderColor: "var(--border)", WebkitBackdropFilter: "blur(18px) saturate(160%)" }}
+    >
+      <div className="wrap flex h-16 items-center justify-between">
+        <a href="#home" className="text-xl font-extrabold !text-ink no-underline">
+          <img src="https://res.cloudinary.com/dxz5ta03h/image/upload/v1768743113/portfolio_y6otag.png" 
+            className="w-8 "
+          />
         </a>
 
-        <nav className={`navbar__links ${open ? "open" : ""}`}>
+        {/* desktop links */}
+        <nav className="hidden items-center gap-6 lg:flex">
           {links.map((l) => (
-            <a key={l.href} href={l.href} onClick={() => setOpen(false)}>
+            <a
+              key={l.href}
+              href={l.href}
+              className="text-sm font-medium !text-muted no-underline transition hover:!text-accent"
+            >
               {l.label}
             </a>
           ))}
         </nav>
 
-        <div className="navbar__actions">
+        <div className="flex items-center gap-2">
           <button
             className="icon-btn"
             onClick={toggleTheme}
@@ -41,14 +51,35 @@ export default function Navbar() {
             {theme === "dark" ? <FaSun /> : <FaMoon />}
           </button>
           <button
-            className="icon-btn navbar__burger"
+            className="icon-btn lg:hidden"
             onClick={() => setOpen((o) => !o)}
             aria-label="Toggle menu"
+            aria-expanded={open}
           >
             {open ? <FaTimes /> : <FaBars />}
           </button>
         </div>
       </div>
+
+      {/* mobile / tablet menu */}
+      <nav
+        className={`overflow-hidden transition-[max-height] duration-300 lg:hidden ${
+          open ? "max-h-[480px]" : "max-h-0"
+        }`}
+        style={{ background: "var(--modal)" }}
+      >
+        {links.map((l) => (
+          <a
+            key={l.href}
+            href={l.href}
+            onClick={() => setOpen(false)}
+            className="block border-t px-6 py-3.5 font-medium !text-ink no-underline"
+            style={{ borderColor: "var(--border)" }}
+          >
+            {l.label}
+          </a>
+        ))}
+      </nav>
     </header>
   );
 }

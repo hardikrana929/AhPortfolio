@@ -9,39 +9,34 @@ import { projects } from "../data.js";
 export default function Projects() {
   return (
     <section id="projects" className="section">
-      <div className="container">
-        <h2 className="section__title">Projects</h2>
+      <div className="wrap">
+        <h2 className="section-title">Projects</h2>
       </div>
       <VerticalTimeline lineColor="var(--line)">
         {projects.map((p) => (
-          <VerticalTimelineElement
-            key={p.title}
-            className="vt-element"
-            contentStyle={{
-              background: "var(--card)",
-              color: "var(--text)",
-              boxShadow: "var(--shadow), var(--glass-hl)",
-              border: "1px solid var(--border)",
-            }}
-            contentArrowStyle={{ borderRight: "7px solid var(--card)" }}
-            iconStyle={{ background: "var(--accent)", color: "#fff" }}
-            icon={<FaCode />}
-          >
-            <img className="vt-img" src={p.image} alt={p.title} loading="lazy" />
-            <h3 className="vt-title">{p.title}</h3>
-            <h4 className="vt-sub">{p.subtitle}</h4>
+          <VerticalTimelineElement key={p.title} icon={<FaCode />}>
+            <img
+              src={p.image}
+              alt={p.title}
+              loading="lazy"
+              className="mb-3 h-44 w-full rounded-xl object-cover sm:h-48"
+            />
+            <h3 className="!text-xl !font-bold">{p.title}</h3>
+            <h4 className="!mt-0 !text-sm !font-semibold text-accent">{p.subtitle}</h4>
             <p>{p.description}</p>
             {p.points && (
-              <ul className="vt-list">
+              <ul className="my-2 ml-5 list-disc text-sm text-muted">
                 {p.points.map((pt) => (
                   <li key={pt}>{pt}</li>
                 ))}
               </ul>
             )}
             {p.tags.length > 0 && (
-              <div className="tags">
+              <div className="my-2 flex flex-wrap gap-1.5">
                 {p.tags.map((t) => (
-                  <span key={t}>{t}</span>
+                  <span key={t} className="chip">
+                    {t}
+                  </span>
                 ))}
               </div>
             )}
@@ -49,7 +44,7 @@ export default function Projects() {
               href={p.link}
               target="_blank"
               rel="noreferrer"
-              className="btn btn--primary btn--sm"
+              className="btn btn-primary btn-sm !text-[var(--on-accent)] no-underline"
             >
               {p.linkLabel} <FaExternalLinkAlt size={12} />
             </a>

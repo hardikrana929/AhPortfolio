@@ -1,16 +1,7 @@
 import { useRef, useState } from "react";
-import {
-  FaPhoneAlt,
-  FaEnvelope,
-  FaMapMarkerAlt,
-  FaLinkedin,
-  FaWhatsapp,
-} from "react-icons/fa";
+import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { profile } from "../data.js";
-
-// URL of your Google Apps Script Web App (ends with /exec). See README.
-const SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
 
 const empty = {
   company_name: "",
@@ -26,42 +17,35 @@ const empty = {
   website: "", // honeypot – must stay empty
 };
 
+const label = "grid gap-1.5 text-sm font-semibold";
+const row = "grid gap-4 sm:grid-cols-2";
+
 export default function Contact() {
   const [form, setForm] = useState(empty);
   const [status, setStatus] = useState({ type: "idle", msg: "" });
   const lastSent = useRef(0);
 
-  const onChange = (e) =>
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  const onChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
   const onSubmit = async (e) => {
     e.preventDefault();
     if (form.website) return; // bot
     if (Date.now() - lastSent.current < 30000) {
-      setStatus({
-        type: "error",
-        msg: "Please wait a few seconds before sending again.",
-      });
-      return;
-    }
-    if (!SCRIPT_URL) {
-      setStatus({
-        type: "error",
-        msg: "Contact form is not configured yet. Please email me directly.",
-      });
+      setStatus({ type: "error", msg: "Please wait a few seconds before sending again." });
       return;
     }
 
     setStatus({ type: "loading", msg: "Sending…" });
     try {
-      // No custom headers => "simple" request, so the browser sends no CORS preflight
-      // (Apps Script cannot answer preflights).
-      const res = await fetch(SCRIPT_URL, {
+      // Sent to our own server function (api/contact.js) which emails you via Gmail
+      const res = await fetch("/api/contact", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      const data = await res.json();
-      if (!data.ok) throw new Error(data.error || "Send failed");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) throw new Error(data.error || "Send failed");
+
       lastSent.current = Date.now();
       setForm(empty);
       setStatus({
@@ -71,129 +55,92 @@ export default function Contact() {
     } catch (err) {
       setStatus({
         type: "error",
-        msg: "Something went wrong while sending. Please try again or email me directly.",
+        msg: err.message && err.message !== "Failed to fetch" && err.message !== "Send failed"
+          ? err.message
+          : "Something went wrong while sending. Please try again or email me directly.",
       });
     }
   };
 
+  const statusStyle = {
+    success: "bg-green-500/15 text-green-600 dark:text-green-400",
+    error: "bg-red-500/15 text-red-600 dark:text-red-400",
+    loading: "text-muted",
+  }[status.type];
+
   return (
     <section id="contact" className="section">
-      <div className="container">
-        <h2 className="section__title">Hire Me / Contact</h2>
-        <div className="contact__grid">
-          <div className="contact__info">
-            <h3>Let's work together</h3>
-            <p>
-              Hiring for a web development role? Fill in the form with the
-              position details and it will reach my inbox directly.
+      <div className="wrap">
+        <h2 className="section-title">Hire Me / Contact</h2>
+        <div className="grid items-start gap-8 lg:grid-cols-[1fr_1.5fr] lg:gap-10">
+          {/* info card */}
+          <div className="glass p-6 sm:p-7">
+            <h3 className="text-xl font-bold">Let's work together</h3>
+            <p className="my-3 text-muted">
+              Hiring for a web development role? Fill in the form with the position details and it
+              will reach my inbox directly.
             </p>
-            <ul>
-              <li>
-                <FaPhoneAlt /> <a href={profile.phoneLink}>{profile.phone}</a>
+            <ul className="grid gap-3">
+              <li className="flex items-start gap-2.5">
+                <FaPhoneAlt className="mt-1.5 shrink-0 text-accent" />
+                <a href={profile.phoneLink}>{profile.phone}</a>
               </li>
-              <li>
-                <FaEnvelope />{" "}
-                <a href={`mailto:${profile.email}`}>{profile.email}</a>
+              <li className="flex items-start gap-2.5">
+                <FaEnvelope className="mt-1.5 shrink-0 text-accent" />
+                <a href={`mailto:${profile.email}`} className="break-all">
+                  {profile.email}
+                </a>
               </li>
-              <li>
-                <FaMapMarkerAlt /> <span>{profile.address}</span>
+              <li className="flex items-start gap-2.5">
+                <FaMapMarkerAlt className="mt-1.5 shrink-0 text-accent" />
+                <span>{profile.address}</span>
               </li>
             </ul>
-            <div className="socials">
-              <a
-                href={profile.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="LinkedIn"
-              >
+            <div className="mt-5 flex gap-3">
+              <a className="icon-btn !rounded-full !text-ink" href={profile.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
                 <FaLinkedin />
               </a>
-              <a
-                href={profile.twitter}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="X"
-              >
+              <a className="icon-btn !rounded-full !text-ink" href={profile.twitter} target="_blank" rel="noreferrer" aria-label="X">
                 <FaXTwitter />
               </a>
-              <a
-                href={profile.whatsapp}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="WhatsApp"
-              >
+              <a className="icon-btn !rounded-full !text-ink" href={profile.whatsapp} target="_blank" rel="noreferrer" aria-label="WhatsApp">
                 <FaWhatsapp />
               </a>
             </div>
           </div>
 
-          <form className="form" onSubmit={onSubmit}>
-            <div className="form__row">
-              <label>
+          {/* form */}
+          <form className="glass grid gap-4 p-5 sm:p-6" onSubmit={onSubmit}>
+            <div className={row}>
+              <label className={label}>
                 Company name *
-                <input
-                  name="company_name"
-                  value={form.company_name}
-                  onChange={onChange}
-                  placeholder="e.g. Acme Technologies Pvt. Ltd."
-                  required
-                />
+                <input className="field" name="company_name" value={form.company_name} onChange={onChange} placeholder="e.g. Acme Technologies Pvt. Ltd." required />
               </label>
-              <label>
+              <label className={label}>
                 Your name *
-                <input
-                  name="contact_person"
-                  value={form.contact_person}
-                  onChange={onChange}
-                  placeholder="Your full name"
-                  required
-                />
+                <input className="field" name="contact_person" value={form.contact_person} onChange={onChange} placeholder="Your full name" required />
               </label>
             </div>
 
-            <div className="form__row">
-              <label>
+            <div className={row}>
+              <label className={label}>
                 Work email *
-                <input
-                  type="email"
-                  name="from_email"
-                  value={form.from_email}
-                  onChange={onChange}
-                  placeholder="name@company.com"
-                  required
-                />
+                <input className="field" type="email" name="from_email" value={form.from_email} onChange={onChange} placeholder="name@company.com" required />
               </label>
-              <label>
+              <label className={label}>
                 Phone
-                <input
-                  type="tel"
-                  name="phone"
-                  value={form.phone}
-                  onChange={onChange}
-                  placeholder="+91 98765 43210"
-                />
+                <input className="field" type="tel" name="phone" value={form.phone} onChange={onChange} placeholder="+91 98765 43210" />
               </label>
             </div>
 
-            <div className="form__row">
-              <label>
+            <div className={row}>
+              <label className={label}>
                 Position / Role *
-                <input
-                  name="position"
-                  value={form.position}
-                  onChange={onChange}
-                  placeholder="e.g. React / MERN Stack Developer"
-                  required
-                />
+                <input className="field" name="position" value={form.position} onChange={onChange} placeholder="e.g. React / MERN Stack Developer" required />
               </label>
-              <label>
+              <label className={label}>
                 Job type
-                <select
-                  name="job_type"
-                  value={form.job_type}
-                  onChange={onChange}
-                  className={form.job_type ? "" : "is-empty"}
-                >
+                <select className="field" name="job_type" value={form.job_type} onChange={onChange}>
                   <option value="">Select job type</option>
                   <option>Full-time</option>
                   <option>Part-time</option>
@@ -203,45 +150,31 @@ export default function Contact() {
               </label>
             </div>
 
-            <div className="form__row">
-              <label>
+            <div className={row}>
+              <label className={label}>
                 Work mode
-                <select
-                  name="work_mode"
-                  value={form.work_mode}
-                  onChange={onChange}
-                  className={form.work_mode ? "" : "is-empty"}
-                >
+                <select className="field" name="work_mode" value={form.work_mode} onChange={onChange}>
                   <option value="">Select work mode</option>
                   <option>On-site</option>
                   <option>Remote</option>
                   <option>Hybrid</option>
                 </select>
               </label>
-              <label>
+              <label className={label}>
                 Job location
-                <input
-                  name="location"
-                  value={form.location}
-                  onChange={onChange}
-                  placeholder="e.g. Ahmedabad, Gujarat"
-                />
+                <input className="field" name="location" value={form.location} onChange={onChange} placeholder="e.g. Ahmedabad, Gujarat" />
               </label>
             </div>
 
-            <label>
+            <label className={label}>
               Offered salary / stipend (optional)
-              <input
-                name="salary"
-                value={form.salary}
-                onChange={onChange}
-                placeholder="e.g. ₹3–4 LPA or ₹15,000 / month"
-              />
+              <input className="field" name="salary" value={form.salary} onChange={onChange} placeholder="e.g. ₹3–4 LPA or ₹15,000 / month" />
             </label>
 
-            <label>
+            <label className={label}>
               Message / Job description *
               <textarea
+                className="field resize-y"
                 name="message"
                 rows={5}
                 value={form.message}
@@ -252,29 +185,14 @@ export default function Contact() {
             </label>
 
             {/* honeypot */}
-            <input
-              type="text"
-              name="website"
-              value={form.website}
-              onChange={onChange}
-              tabIndex={-1}
-              autoComplete="off"
-              className="hp"
-              aria-hidden="true"
-            />
+            <input type="text" name="website" value={form.website} onChange={onChange} tabIndex={-1} autoComplete="off" className="hp" aria-hidden="true" />
 
-            <button
-              className="btn btn--primary"
-              disabled={status.type === "loading"}
-            >
+            <button className="btn btn-primary w-full" disabled={status.type === "loading"}>
               {status.type === "loading" ? "Sending…" : "Send Hiring Request"}
             </button>
 
             {status.msg && (
-              <p
-                className={`form__status form__status--${status.type}`}
-                role="status"
-              >
+              <p className={`rounded-lg px-3.5 py-2.5 text-sm ${statusStyle}`} role="status">
                 {status.msg}
               </p>
             )}

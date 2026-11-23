@@ -7,34 +7,30 @@ import { skills } from "../data.js";
 export default function Skills() {
   return (
     <section id="skills" className="section">
-      <div className="container">
-        <h2 className="section__title">Skills</h2>
+      <div className="wrap">
+        <h2 className="section-title">Skills</h2>
       </div>
       <Swiper
-        className="skills__swiper"
+        className="skills-swiper !px-4 !pb-6 !pt-2"
         modules={[Autoplay, FreeMode]}
         loop
         freeMode
         grabCursor
         speed={3500}
         slidesPerView={2.2}
-        spaceBetween={16}
-        autoplay={{
-          delay: 0,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true,
-        }}
+        spaceBetween={14}
+        autoplay={{ delay: 0, disableOnInteraction: false, pauseOnMouseEnter: true }}
         breakpoints={{
           480: { slidesPerView: 3.2 },
-          768: { slidesPerView: 4.5 },
-          1100: { slidesPerView: 6 },
+          768: { slidesPerView: 4.5, spaceBetween: 16 },
+          1100: { slidesPerView: 6, spaceBetween: 18 },
         }}
       >
         {skills.map(({ name, icon: Icon, color }) => (
           <SwiperSlide key={name}>
-            <div className="skill-card">
-              <Icon size={44} color={color} />
-              <span>{name}</span>
+            <div className="glass flex h-28 flex-col items-center justify-center gap-3 font-semibold transition hover:!border-[var(--accent)] sm:h-32">
+              <Icon size={40} color={color} />
+              <span className="text-sm sm:text-base">{name}</span>
             </div>
           </SwiperSlide>
         ))}
